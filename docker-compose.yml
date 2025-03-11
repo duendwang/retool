@@ -1,4 +1,3 @@
-version: '2'
 services:
   api:
     build:
@@ -11,16 +10,17 @@ services:
       - DB_CONNECTOR_PORT=3002
       - DB_SSH_CONNECTOR_HOST=http://db-ssh-connector
       - DB_SSH_CONNECTOR_PORT=3002
-      - VIRTUAL_HOST=retool.hirambusinesssolutions.com
-      - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=retool.hirambusinesssolutions.com
-      - LETSENCRYPT_EMAIL=webmaster@hirambusinesssolutions.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.perfex.entrypoints=websecure"
+      - "traefik.http.routers.perfex.rule=Host(`DOMAIN`)"
+      - "traefik.http.routers.perfex.tls.certresolver=http-challenge"
     networks:
       - frontend-network
       - backend-network
       - db-connector-network
       - db-ssh-connector-network
-      - nginx-proxy
+      - traefik-proxy
     depends_on:
       - postgres
       - db-connector
@@ -106,8 +106,8 @@ networks:
   backend-network:
   db-connector-network:
   db-ssh-connector-network:
-  nginx-proxy:
-    name: nginx-proxy
+  traefik-proxy:
+    name: traefik-proxy
     external: true
 
 volumes:
