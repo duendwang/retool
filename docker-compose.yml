@@ -12,9 +12,9 @@ services:
       - DB_SSH_CONNECTOR_PORT=3002
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.perfex.entrypoints=websecure"
-      - "traefik.http.routers.perfex.rule=Host(`DOMAIN`)"
-      - "traefik.http.routers.perfex.tls.certresolver=http-challenge"
+      - "traefik.http.routers.retool.entrypoints=websecure"
+      - "traefik.http.routers.retool.rule=Host(`DOMAIN`)"
+      - "traefik.http.routers.retool.tls.certresolver=http-challenge"
     networks:
       - frontend-network
       - backend-network
