@@ -4,6 +4,12 @@ services:
       context: ./
       dockerfile: Dockerfile.local
     env_file: ./docker.env
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     environment:
       - SERVICE_TYPE=MAIN_BACKEND
       - DB_CONNECTOR_HOST=http://db-connector
@@ -13,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.retool.entrypoints=websecure"
-      - "traefik.http.routers.retool.rule=Host(`DOMAIN`)"
+      - "traefik.http.routers.retool.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.retool.tls.certresolver=http-challenge"
     networks:
       - frontend-network
@@ -41,6 +47,12 @@ services:
       context: ./
       dockerfile: Dockerfile.local
     env_file: ./docker.env
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     environment:
       - SERVICE_TYPE=JOBS_RUNNER
     networks:
@@ -55,6 +67,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.local
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     command: bash -c "./retool_backend"
     env_file: ./docker.env
     environment:
@@ -67,6 +85,12 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.local
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     command: bash -c "./docker_scripts/generate_key_pair.sh; ./retool_backend"
     env_file: ./docker.env
     environment:
@@ -81,6 +105,12 @@ services:
   postgres:
     image: 'postgres:9.6.5'
     env_file: docker.env
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     networks:
       - backend-network
       - db-connector-network
